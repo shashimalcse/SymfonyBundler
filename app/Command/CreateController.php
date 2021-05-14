@@ -52,6 +52,52 @@ class CreateController extends CommandController
         $this->createConfigurationClass($name,$organization,$confDir);
         $this->createExtensionClass($name,$organization,$confDir);
         $this->createConfigFiles($resDir);
+        $this->createComposerJson($name,$organization,$bundleDir);
+
+    }
+
+    private function createComposerJson($name,$org,$bundleDir){
+        $authorName = readline("\033[32mAuthor Name: \033[0m");
+        $authorEmail= readline("\033[32mAuthor Email: \033[0m");
+        $description= readline("\033[32mDescription: \033[0m");
+        $bundleName = "{$name}Bundle";
+        $lowerCaseName = strtolower($name);
+        $lowerCaseOrg = strtolower($org);
+        $treeBuilderName = "{$lowerCaseOrg}_$lowerCaseName";
+        $myfile = fopen("$bundleDir/composer.json", "w") or die("Unable to open file!");
+        $txt =
+        "
+{
+    \"name\": \"{$lowerCaseOrg}/{$lowerCaseName}-bundle\",
+    \"type\": \"symfony-bundle\",
+    \"license\": \"MIT\",
+    \"authors\": [
+        {
+            \"name\": \"{$authorName}\",
+            \"email\": \"{$authorEmail}\"
+        }
+    ],
+    \"require\": {
+
+    },
+    \"description\": \"{$description}\",
+    \"autoload\": {
+        \"psr-4\": {
+            \"Esol\\\\{$bundleName}\\\\\": \"src/\"
+        }
+    },
+    \"autoload-dev\": {
+        \"psr-4\": {
+            \"Esol\\\\{$bundleName}\\\\Test\\\\\": \"tests/\"
+        }
+    },
+    \"require-dev\": {
+
+    }
+}
+        ";
+        fwrite($myfile, $txt);
+        fclose($myfile);
 
     }
 
