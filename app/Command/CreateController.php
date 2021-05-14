@@ -12,12 +12,19 @@ class CreateController extends CommandController
             $this->getApp()->getPrinter()->display("\033[31mInvalid bundle name");
             die();
         }
-        $name = $argv[2];
+        if (!is_dir($argv[2])){
+            $this->getApp()->getPrinter()->display("\033[31mInvalid Directory");
+            die();
+        }
+        $dir = $argv[2];
+        if(!isset($argv[3])){
+            $this->getApp()->getPrinter()->display("\033[31mInvalid bundle name");
+            die();
+        }
+        $name = $argv[3];
         $name = ucwords(strtolower($name));
         $bundleName = "{$name}Bundle";
-        chdir('../');
-        $desktop = getcwd();
-        $bundleDir = "$desktop/$bundleName";
+        $bundleDir = "{$dir}/$bundleName";
         if (is_dir($bundleDir)){
             $this->getApp()->getPrinter()->display("\033[31mFolder already exists");
             die();
